@@ -1,0 +1,19 @@
+@startuml Диаграмма контекста
+!include <C4/C4_Container>
+
+Person(client, "Клиент")
+
+System_Boundary(c1, "Приложение 'Теплый дом'") {
+    Container(web_app, "Монолитное приложение", "Java, Postgres", "Позволяет получеть данные с датчиков и вкл/выкл отопление")
+}
+
+System_Boundary(c2, "Устройства умного дома") {
+    Container(sensor, "Датчик температуры")
+    Container(device, "Устройство управления отоплением")
+}
+
+
+Rel(client, web_app, "Запросы к сервису", "HTTPS")
+Rel(web_app, device, "Вкл/выкл устройство, изменение температуры", "HTTPS")
+Rel(web_app, sensor, "Получение данных с датчика", "HTTPS")
+@enduml

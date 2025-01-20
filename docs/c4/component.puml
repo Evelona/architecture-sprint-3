@@ -1,0 +1,24 @@
+@startuml Диаграмма компонента API-компонент
+
+!include <C4/C4_Container>
+
+Person(client, "Клиент")
+
+    Container(web_app, "Приложение 'Теплый дом'")
+
+
+System_Boundary(c2, "API-компонент") {
+    Container(controller, "Heating System Controller")
+    Container(service, "Heating System Service")
+    Container(data, "Data access Component")
+}
+
+ContainerDb(db, "База Данных", "Postgres")
+
+Rel(client, web_app, "Отправляет запросы к приложению (вкл/выкл отопление)")
+Rel(web_app, controller, "Использует методы контроллера")
+Rel(controller, service, "Вызывает сервисы")
+Rel(service, data, "Вызывает")
+Rel(data, db, "делает запрос")
+
+@enduml

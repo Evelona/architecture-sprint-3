@@ -1,0 +1,50 @@
+@startuml Диаграмма кода - API - компонент
+interface JpaRepository {}
+' Сущности базы данных
+class HeatingSystem {
+    Long id
+    boolean isOn
+    double targetTemperature
+    double currentTemperature
+}
+
+class TemperatureSensor {
+    Long id
+    double currentTemperature
+    LocalDateTime lastUpdated
+}
+
+' Репозитории
+interface HeatingSystemRepository {}
+
+interface TemperatureSensorRepository {}
+
+' Сервисы
+class HeatingSystemService {
+    + getHeatingSystem(Long id): HeatingSystemDto
+    + updateHeatingSystem(Long id, HeatingSystemDto heatingSystemDto): HeatingSystemDto
+    + turnOn(Long id): void
+    + turnOff(Long id): void
+    + setTargetTemperature(Long id, double temperature): void
+    + getCurrentTemperature(Long id): double
+}
+
+' Контроллер
+class HeatingSystemController {
+    + getHeatingSystem(Long id): ResponseEntity<HeatingSystemDto>
+    + updateHeatingSystem(Long id, HeatingSystemDto heatingSystemDto): ResponseEntity<HeatingSystemDto>
+    + turnOn(Long id): ResponseEntity<Void>
+    + turnOff(Long id): ResponseEntity<Void>
+    + setTargetTemperature(Long id, double temperature): ResponseEntity<Void>
+    + getCurrentTemperature(Long id): ResponseEntity<Double>
+}
+
+' Связи между классами
+HeatingSystemService --> HeatingSystemRepository : использует
+HeatingSystemService --> TemperatureSensorRepository : использует
+HeatingSystemController --> HeatingSystemService : вызывает
+HeatingSystem "1" -- "*" TemperatureSensor : sensors
+
+HeatingSystemRepository --|> JpaRepository: наследуется
+TemperatureSensorRepository --|> JpaRepository: наследуется
+@enduml
