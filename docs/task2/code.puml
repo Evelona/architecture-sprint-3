@@ -1,0 +1,49 @@
+@startuml
+
+title Диаграмма кода для сервиса Управления устройствами
+class Device {
+    Long id
+    String name
+    boolean isOn
+    double targetTemperature
+
+    + toggleOnOff(): void
+    + setTargetTemperature(double temperature): void
+}
+
+class Scenario {
+    Long id
+    String name
+    String description
+
+    + executeScenario(): void
+}
+
+class DeviceService {
+    - deviceRepository: DeviceRepository
+
+    + toggleDevice(Long deviceId): void
+    + updateDeviceSettings(Long deviceId, double temperature): void
+}
+
+class ScenarioService {
+    - scenarioRepository: ScenarioRepository
+
+    + executeScenario(Long scenarioId): void
+}
+
+interface DeviceRepository {
+    + findById(Long id): Optional<Device>
+    + save(Device device): void
+}
+
+interface ScenarioRepository {
+    + findById(Long id): Optional<Scenario>
+    + save(Scenario scenario): void
+}
+
+DeviceService --> DeviceRepository
+ScenarioService --> ScenarioRepository
+DeviceService --> Device
+ScenarioService --> Scenario
+@enduml

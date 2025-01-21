@@ -1,0 +1,19 @@
+@startuml
+!include <C4/C4_Component>
+
+Container_Boundary(c1, "Микросервис Уведомлений") {
+    Component(api, "API Компонент", "REST API", "Принимает запросы для отправки уведомлений")
+    Component(service, "Сервис обработки запросов", "Java", "Обрабатывает запросы на уведомления и сохраняет данные о методах оповещения в базу данных")
+    Component(dataAccess, "Data Access Component", "", "Взаимодействует с базой данных для отправки данных (почта, телефон)")
+    ComponentDb(database, "Database", "PostgreSQL", "Хранит информацию о пользователе с предпочитаемым методом оповещения")
+    Component(notifications, "Компонент отправки уведомлений", "SMTP / Push Gateway", "Фактически отправляет уведомления (e-mail, SMS, push)")
+    ComponentQueue(messageBroker, "Кафка", "Kafka", "Передает сообщения для асинхронной обработки уведомлений")
+}
+
+Rel(api, service, "Передает уведомление для обработки")
+Rel(service, dataAccess, "Сохраняет инфомацию о пользователе в базу данных")
+Rel(dataAccess, database, "Записывает/читает информацию о пользователе и куда нужно отпраить пуш")
+Rel(messageBroker, service, "Передает сообщения для обработки")
+Rel(service, notifications, "Передает сообщения для обработки")
+
+@enduml
