@@ -1,0 +1,19 @@
+@startuml
+!include <C4/C4_Component>
+
+Container_Boundary(c1, "Микросервис журналирования") {
+    Component(api, "API Компонент", "REST API", "Принимает запросы для записи и получения логов")
+    Component(service, "Сервис обработки логов", "Java", "Обрабатывает логи и сохраняет их в базу данных")
+    Component(dataAccess, "Data Access Component","" , "Взаимодействует с базой данных для сохранения и выборки логов")
+    ComponentDb(database, "Database", "PostgreSQL", "Хранит логи")
+
+    ComponentQueue(messageBroker, "Кафка", "Kafka", "Передает сообщения для асинхронной обработки логов")
+}
+
+Rel(api, service, "Передает логи для обработки")
+Rel(service, dataAccess, "Сохраняет логи в базу данных")
+Rel(dataAccess, database, "Записывает/читает логи")
+Rel(api, database, "Запрашивает логи")
+Rel(messageBroker, service, "Передает сообщения для обработки")
+
+@enduml

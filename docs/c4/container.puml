@@ -1,0 +1,15 @@
+@startuml диаграмма Контейнеров
+!include <C4/C4_Container>
+
+Person(client, "Клиент")
+
+System_Boundary(c1, 'приложение "Теплый дом"') {
+        Container(webApp, "Веб-интерфейс")
+        Container(api, "API-Компонент", "Java")
+        ContainerDb(db, "База Данных", "Postgres")
+}
+
+Rel(client, webApp, "Запросы к сервису", "HTTPS")
+Rel(webApp, api, "Запросы к апи", "REST")
+Rel(api, db, "Запросы к данным")
+@enduml

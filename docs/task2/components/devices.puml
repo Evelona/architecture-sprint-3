@@ -1,0 +1,18 @@
+@startuml
+!include <C4/C4_Component>
+
+Container_Boundary(c1, "Сервис управления устройствами") {
+    Component(api, "API Компонент", "REST API", "Принимает запросы для управления устройствами и их настройками")
+    Component(deviceService, "сервис Манипуляции с устройсвами", "Java", "Обрабатывает команды управления устройствами и взаимодействует с микросервисом мониторинга")
+    Component(scenarioService, "сервис Сценариев", "Java", "Реализует сценарии автоматизации (например, включение устройств по расписанию)")
+    Component(dataAccess, "Data Access Component", "", "Читает/записывает данные об устройствах и их настройках")
+    ComponentDb(database, "Database", "PostgreSQL", "Хранит данные об устройствах, их конфигурации и сценариях")
+    ComponentQueue(messageBroker, "Message Broker", "Kafka", "Получает данные с датчиков через микросервис мониторинга")
+}
+
+Rel(api, deviceService, "Передает команды управления устройствами")
+Rel(deviceService, scenarioService, "Передает данные для выполнения сценариев")
+Rel(deviceService, dataAccess, "Читает/записывает данные об устройствах")
+Rel(dataAccess, database, "Читает/записывает информацию об устройствах и конфигурациях")
+Rel(deviceService, messageBroker, "Получает данные с датчиков для управления устройствами")
+@enduml

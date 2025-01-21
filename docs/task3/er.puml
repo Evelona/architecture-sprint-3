@@ -1,0 +1,48 @@
+@startuml
+entity "Устройство" as Device {
+    * id : Long
+    * name : String
+    * home_id : Long
+    * isOn : Boolean
+}
+
+entity "Пользователь" as User {
+    * id : Long
+    * name : String
+    * role : String
+    * created_at : Date
+}
+
+entity "Дом" as Home {
+    * id : Long
+    * name : String
+}
+
+entity "Показание температуры" as TemperatureReading {
+    * id : Long
+    * device_id : Long
+    * current_temperature : Double
+    * max_value : Double
+    * min_value : Double
+    * timestamp : Date
+}
+
+entity "Сценарий" as Scenario {
+    * id : Long
+    * name : String
+    * data : String
+    * device_id : Long
+}
+
+entity "UserHome" as UserHome {
+    * user_id : Long
+    * home_id : Long
+}
+
+' Связи
+Device }o--|| Home : "относится"
+User }o--o| UserHome : "связан"
+Home }o--o| UserHome : "связан"
+TemperatureReading }o--|| Device : "записывает для"
+Scenario }o--|| Device : "относится"
+@enduml

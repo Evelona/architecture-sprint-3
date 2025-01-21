@@ -1,0 +1,69 @@
+@startuml
+!include <C4/C4_Container>
+
+title Диаграма контейнеров
+
+Person(client, "Клиент")
+System_Ext(sensor, "Датчики или Устройство умного дома")
+
+Container(apiGw, "API Gateway")
+Container_Ext(kafka, "Кафка")
+
+System_Boundary(msAuth, 'Микросервис Авторизации и управления учетками') {
+    Container(authController, "Контроллер Авторизации")
+    ContainerDb(AuthDb, "Postgres")
+}
+
+System_Boundary(msDevices, 'Микросервис управления устройствами') {
+    Container(deviceController, "Контроллер управления устройствами")
+    ContainerDb(deviceDb, "MongoDb")
+}
+
+System_Boundary(msMonitoring, 'Микросервис мониторинга состояния жилища') {
+    Container(monitoringController, "Контроллер мониторинга")
+    ContainerDb(monitoringDb, "Postgres")
+}
+
+System_Boundary(msNotification, 'Микросервис уведомлений') {
+    Container(notificationController, "Контроллер уведомлений")
+    ContainerDb(notificationDb, "Postgres")
+}
+
+System_Boundary(msNotification, 'Микросервис уведомлений') {
+    Container(monitoringController, "Контроллер уведомлений")
+    ContainerDb(monitoringDb, "Postgres")
+}
+
+System_Boundary(msHistory, 'Микросервис истории дейтсвий') {
+    Container(historyController, "Контроллер истории дейтсвий")
+    ContainerDb(historyDb, "Postgres")
+}
+
+
+Rel(client, apiGw, "Отправляет запросы к приложению")
+Rel(sensor, apiGw, "Отправляет данные о состоянии комнат")
+
+Rel(apiGw, msAuth, "Запрос на авторизацию/регистрацию")
+Rel(authController, AuthDb, "Запрос данных об учетке")
+
+Rel(apiGw, msDevices, "Запрос на изменение состояния устройства/регистрации нового устройства")
+Rel(deviceController, deviceDb, "Запрос данных об устройстве")
+Rel(deviceController, kafka, "Запрос на уведомление пользователя об изменении устр-ва/реагирование на крит показатели датчиков")
+Rel(deviceController, sensor, "Команда изменения устр-ва")
+
+Rel(apiGw, msMonitoring, "Запрос на текущее состояние в помещении")
+Rel(monitoringController, monitoringDb, "Запись данных с датчиков в комнате")
+Rel(monitoringController, kafka, "Запись сообщений о показаниях датчиков")
+
+
+Rel(kafka, msNotification, "")
+Rel(notificationController, notificationDb, "Запись данных для отправки уведомлений")
+Rel(notificationController, client, "Пушка уведомлений пользователю")
+
+Rel(apiGw, msHistory, "запрос на историю действий")
+Rel(historyController, historyDb, "Запись логов")
+Rel(historyController, kafka, "Подпись на топики с действиями")
+
+
+
+@enduml

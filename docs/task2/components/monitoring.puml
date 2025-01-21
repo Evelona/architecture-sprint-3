@@ -1,0 +1,16 @@
+@startuml
+!include <C4/C4_Component>
+
+Container_Boundary(c1, "Микросервис мониторинга") {
+    Component(api, "API Компонент", "REST API", "Предоставляет доступ к данным (текущим и историческим)")
+    Component(dataProcessing, "Сервис обработки данных", "Java", "Обрабатывает данные от датчиков: фильтрация, валидация, агрегация")
+    Component(dataAccess, "Data Access Component", "", "Обеспечивает взаимодействие с базой данных для хранения и чтения данных")
+    ComponentQueue(messageBroker, "Message Broker", "Kafka", "Асинхронная передача данных с датчиков")
+    ComponentDb(database, "Database", "Postgres", "Хранит временные ряды данных, собранные с датчиков")
+}
+
+Rel(messageBroker, dataProcessing, "Передает данные от датчиков для обработки")
+Rel(api, dataProcessing, "Отправляет запросы на обработку и доступ к данным")
+Rel(dataProcessing, dataAccess, "Сохраняет данные в базу и запрашивает их")
+Rel(dataAccess, database, "Читает/записывает временные ряды")
+@enduml

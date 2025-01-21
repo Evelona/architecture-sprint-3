@@ -1,0 +1,17 @@
+@startuml
+!include <C4/C4_Component>
+
+Container_Boundary(c1, "Сервис Авторизации") {
+    Component(api, "API Компонент", "REST API", "Принимает запросы для регистрации, аутентификации и проверки токенов")
+    Component(authService, "сервис Аутентификации", "Java", "Проверяет учетные данные, создает токены")
+    Component(authzService, "сервис Авторизации", "Java", "Управляет ролями и проверяет права доступа")
+    Component(dataAccess, "Data Access Component", "", "Взаимодействует с базой данных для хранения пользователей, ролей и токенов")
+    ComponentDb(database, "Database", "PostgreSQL", "Хранит данные о пользователях, ролях и правах доступа")
+}
+
+Rel(api, authService, "Передает учетные данные для аутентификации")
+Rel(api, authzService, "Запрашивает проверку прав доступа")
+Rel(authService, dataAccess, "Читает/записывает данные пользователей и токенов")
+Rel(authzService, dataAccess, "Читает данные ролей и прав")
+Rel(dataAccess, database, "Читает/записывает данные о пользователях и ролях")
+@enduml
