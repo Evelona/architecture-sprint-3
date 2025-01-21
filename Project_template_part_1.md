@@ -81,12 +81,12 @@
 
 Чтобы добавить ссылку в файл Readme.md, нужно использовать синтаксис Markdown. Это делают так:
 
-```markdown
-[Диаграмма контекстов](docs/c4/context.puml)
-[Диаграмма контейнера](docs/c4/container.puml)
-[Диаграмма компонента](docs/c4/component.puml)
+
+[Диаграмма контекстов](docs/c4/context.puml)\
+[Диаграмма контейнера](docs/c4/container.puml)\
+[Диаграмма компонента](docs/c4/component.puml)\
 [Диаграмма кода](docs/c4/code.puml)
-```
+
 
 # Задание 2. Проектирование микросервисной архитектуры
 
@@ -94,16 +94,20 @@
 
 **Диаграмма контейнеров (Containers)**
 
-Добавьте диаграмму.
+[Диаграмма контейнера](docs/task2/container.puml)
 
 **Диаграмма компонентов (Components)**
 
-Добавьте диаграмму для каждого из выделенных микросервисов.
+[Диаграмма компонента Auth](docs/task2/components/auth.puml)\
+[Диаграмма компонента Device](docs/task2/components/devices.puml)\
+[Диаграмма компонента History](docs/task2/components/history.puml)\
+[Диаграмма компонента Monitoring](docs/task2/components/monitoring.puml)\
+[Диаграмма компонента Notification](docs/task2/components/notification.puml)
 
 **Диаграмма кода (Code)**
 
-Добавьте одну диаграмму или несколько.
+[Диаграмма кода](docs/task2/code.puml)
 
 # Задание 3. Разработка ER-диаграммы
 
-Добавьте сюда ER-диаграмму. Она должна отражать ключевые сущности системы, их атрибуты и тип связей между ними.
+[ER-диаграмма](docs/task3/er.puml)
